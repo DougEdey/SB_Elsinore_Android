@@ -1,0 +1,285 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:atswidget="http://schemas.android.com/apk/res/com.strangebrew.elsinore"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity$DummySectionFragment" >
+
+    <TextView 
+        android:id="@+id/chrono_label"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/chrono_label"
+		android:onClick="onClickChrono"
+		android:layout_toLeftOf="@+id/chrono"
+        android:contentDescription="@string/ChronoLabel"
+        />
+    
+   	<Chronometer
+   	    android:id="@+id/chrono"
+   	       android:layout_toLeftOf="@+id/start_timer"
+   	        android:layout_width="wrap_content"
+               android:layout_height="wrap_content" 
+             
+   	    />
+   	
+	<Button
+        android:id="@+id/start_timer"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/chrono_start"
+        android:layout_centerHorizontal="true"        
+        android:contentDescription="@string/ChronoStart"
+        android:onClick="startChrono"
+        />
+    <Button
+        android:id="@+id/reset_timer"
+        android:layout_toRightOf="@+id/start_timer"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/chrono_reset"
+        android:layout_centerHorizontal="true"        
+        android:contentDescription="@string/ChronoReset"
+        android:onClick="resetChrono"
+        />
+    	
+    <com.freddymartens.android.widgets.Gauge
+        android:layout_below="@+id/start_timer"
+                android:id="@+id/temp_meter" 
+                android:layout_width="300dp"
+                android:layout_height="300dp" 
+                android:layout_centerHorizontal="true"
+                android:layout_margin="2dp"
+                atswidget:totalNotches="120" 
+                atswidget:incrementPerLargeNotch="10"
+                atswidget:incrementPerSmallNotch="2" 
+                atswidget:scaleCenterValue="145"
+                atswidget:scaleColor="0x9f004d0f" 
+                atswidget:scaleMinValue="40"
+                atswidget:scaleMaxValue="240" 
+                atswidget:rangeOkColor="0x9f00ff00"
+                atswidget:rangeOkMinValue="140" 
+                atswidget:rangeOkMaxValue="162"
+                atswidget:rangeWarningColor="0x9fff8800"
+                atswidget:rangeWarningMinValue="166" 
+                atswidget:rangeWarningMaxValue="176"
+                atswidget:rangeErrorColor="0x9fff0000" 
+                atswidget:rangeErrorMinValue="232"
+                atswidget:rangeErrorMaxValue="234" 
+                atswidget:unitTitle="\u2103"
+                atswidget:lowerTitle="Created by Freddy Martens" 
+                atswidget:upperTitle="Visit http://atstechlab.wordpress.com" 
+                atswidget:showGauge="false"
+                atswidget:showHand="true"
+                atswidget:showRange="true"
+                />
+    <TextView
+        android:id="@+id/section_label"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+      <!--    Mode Input -->
+
+     <RadioGroup
+         android:id="@+id/radio_mode"
+         android:layout_below="@+id/temp_meter"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"         
+         android:layout_centerHorizontal="true"
+         android:layout_centerVertical="false"
+         android:contentDescription="@string/PIDInputMode"
+         android:gravity="top"
+         android:orientation="horizontal" >
+
+       <RadioButton android:id="@+id/mode_off"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/mode_off"
+           android:onClick="onRadioButtonClicked"
+           />
+       <RadioButton android:id="@+id/mode_auto"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/mode_auto"
+           android:onClick="onRadioButtonClicked"
+           />
+       <RadioButton android:id="@+id/mode_manual"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/mode_manual"
+           android:onClick="onRadioButtonClicked"
+           />
+   </RadioGroup>
+    
+     
+     <!-- Target temperature Input -->
+     <TextView 
+        android:id="@+id/label_target_temp"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/target_temp"
+        android:layout_toLeftOf="@+id/target_temp"
+        android:contentDescription="@string/PIDLabelSetpoint"
+        android:layout_below="@+id/radio_mode"/>
+
+    <EditText
+        android:id="@+id/target_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radio_mode"
+        android:layout_toLeftOf="@+id/label_p"
+        android:contentDescription="@string/PIDInputSetpoint"
+        android:inputType="number"
+        android:prompt="@string/target_temp" />
+
+     <!-- Duty Input -->
+     <TextView 
+        android:id="@+id/label_duty_cycle"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/duty_cycle"
+        android:layout_toLeftOf="@+id/duty_cycle"
+        android:layout_below="@+id/target_temp"
+        android:contentDescription="@string/PIDLabelDutycycle"/>
+
+
+    <EditText
+        android:id="@+id/duty_cycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:prompt="@string/duty_cycle"
+        android:layout_below="@+id/target_temp"
+        android:layout_toLeftOf="@+id/label_i"
+        android:contentDescription="@string/PIDInputDutycycle"
+         />
+    
+    <!-- Cycle Input -->
+     <TextView 
+        android:id="@+id/label_cycle_time"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/cycle_time"
+        android:layout_toLeftOf="@+id/cycle_time"
+        android:layout_below="@+id/duty_cycle"
+        android:contentDescription="@string/PIDLabelCycletime"/>
+
+
+    <EditText
+        android:id="@+id/cycle_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:prompt="@string/cycle_time"
+        android:layout_below="@+id/duty_cycle"
+        android:layout_toLeftOf="@+id/label_k"
+        android:contentDescription="@string/PIDInputCycletime"
+         />
+
+    <!-- P Input -->
+
+     <TextView
+         android:id="@+id/label_p"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/radio_mode"
+         android:layout_centerHorizontal="true"
+         android:contentDescription="@string/PIDLabelP"
+         android:paddingLeft="20dp"
+         android:text="@string/p_label" />
+
+    <EditText
+        android:id="@+id/p_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_below="@+id/radio_mode"
+        android:layout_toRightOf="@+id/label_p"
+        android:contentDescription="@string/PIDInputP" />
+
+    <TextView 
+        android:id="@+id/unit_p"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/p_value"
+        android:layout_below="@+id/radio_mode"
+        android:layout_toRightOf="@id/p_input"
+        android:contentDescription="@string/PIDLabelPunit"/>
+    
+     <!-- I Input -->
+     <TextView 
+        android:id="@+id/label_i"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/i_label"
+        android:paddingLeft="20dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/PIDLabelI"
+        android:layout_below="@+id/p_input"/>
+
+    <EditText
+        android:id="@+id/i_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_below="@+id/p_input"
+        android:layout_toRightOf="@+id/label_i"
+        android:contentDescription="@string/PIDInputI"/>
+
+    <TextView 
+        android:id="@+id/unit_i"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/i_value"
+        android:layout_toRightOf="@id/i_input"
+        android:layout_below="@+id/p_input"
+        android:contentDescription="@string/PIDLabelIunit"/>
+    
+    <!-- K Input -->
+     <TextView 
+        android:id="@+id/label_k"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/k_label"
+        android:paddingLeft="20dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/PIDLabelK"
+        android:layout_below="@+id/i_input"/>
+
+    <EditText
+        android:id="@+id/k_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_below="@+id/i_input" 
+        android:layout_toRightOf="@+id/label_k"
+        android:contentDescription="@string/PIDInputK"/>
+
+    <TextView 
+        android:id="@+id/unit_k"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/k_value"
+        android:layout_below="@+id/i_input"        
+        android:layout_toRightOf="@id/k_input"
+        android:contentDescription="@string/PIDLabelKunit"/>
+
+    <Button
+        android:id="@+id/submit_settings"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/submit"
+        android:layout_below="@+id/k_input"
+        android:layout_centerHorizontal="true"        
+        android:contentDescription="@string/PIDSubmit"
+        android:onClick="onClickSubmit"
+        />
+
+    
+
+</RelativeLayout>

@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" >
+
+    <PreferenceCategory 
+        android:title="@string/pref_server_settings"
+        android:key="pref_key_storage_settings">
+        <EditTextPreference
+            android:key="pref_key_server_name"
+            android:summary="@string/pref_summary_server"
+            android:title="@string/pref_title_server_name"
+        	/>
+        <EditTextPreference
+            android:key="pref_key_server_port"
+            android:summary="@string/pref_summary_server_port"
+            android:title="@string/pref_title_server_port"
+            android:inputType="number"
+            android:defaultValue="8080"/>
+        
+        <EditTextPreference
+            android:key="pref_key_server_refresh"
+            android:summary="@string/pref_summary_server_refresh"
+            android:title="@string/pref_title_server_refresh"
+            android:inputType="number"
+            android:defaultValue="5"/>
+        
+        </PreferenceCategory>
+    
+</PreferenceScreen>

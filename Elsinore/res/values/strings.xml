@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Elsinore</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section_hlt">HLT</string>
+    <string name="title_section_mlt">MLT</string>
+    <string name="title_section_kettle">Kettle</string>
+    <string name="local_service_started">Background Service Started</string>
+    <string name="pref_server_settings">Server Settings</string>
+    <string name="pref_summary_server">Server Name</string>
+    <string name="pref_title_server_name">Server Title</string>
+    <string name="pref_summary_server_port">Port Number</string>
+    <string name="pref_title_server_port">Port</string>
+    <string name="pref_summary_server_refresh">Server Refresh Time (s)</string>
+    <string name="pref_title_server_refresh">Refresh</string>
+<!-- PID Input strings -->
+   <string name="target_temp">Target Temperature</string>
+   <string name="duty_cycle">Duty Cycle</string>
+   <string name="cycle_time">Cycle Time</string>
+   <string name="k_label">K</string>
+   <string name="i_label">I</string>
+   <string name="p_label">P</string>
+   <string name="k_value">Kval</string>
+   <string name="i_value">Ival</string>
+   <string name="p_value">Pval</string>
+   
+   <string name="submit">Update Settings</string>
+
+   <!-- Radio button strings -->
+   <string name="mode_auto">Auto</string>
+   <string name="mode_off">Off</string>
+   <string name="mode_manual">Manual</string>
+
+   <!--  PID Content descriptions to make it easier to hide  -->
+   <string name="PIDInput">PID Input</string>
+   <string name="PIDInputMode">PID Input Mode</string>
+   <string name="PIDInputSetpoint">PID Input Setpoint</string>
+   <string name="PIDInputDutycycle">PID Input Dutycycle</string>
+   <string name="PIDInputCycletime">PID Input Cycletime</string>
+   <string name="PIDInputP">PID Input P</string>
+   <string name="PIDInputI">PID Input I</string>
+   <string name="PIDInputK">PID Input K</string>
+   <string name="PIDSubmit">PID Submit</string>
+
+   
+   <string name="PIDLabel">PID Label</string>
+   <string name="PIDLabelMode">PID Label Mode</string>
+   <string name="PIDLabelSetpoint">PID Label Setpoint</string>
+   <string name="PIDLabelDutycycle">PID Label Dutycycle</string>
+   <string name="PIDLabelCycletime">PID Label Cycletime</string>
+   <string name="PIDLabelP">PID Label P</string>
+   <string name="PIDLabelI">PID Label I</string>
+   <string name="PIDLabelK">PID Label K</string>
+   <string name="PIDLabelPunit">PID Label P Unit</string>
+   <string name="PIDLabelIunit">PID Label I Unit</string>
+   <string name="PIDLabelKunit">PID Label K Unit</string>
+   
+   <!--  Chronometer labels -->
+   <string name="chrono_label">Timer:</string>
+   
+   <string name="chrono_start">Start</string>
+   <string name="chrono_stop">Stop</string>
+   <string name="chrono_reset">Reset</string>
+   
+   <string name="ChronoLabel">Chrono Label</string>
+   <string name="ChronoStart">Chrono Start</string>
+   <string name="ChronoReset">Chrono Reset</string>
+   
+</resources>
