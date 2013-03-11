@@ -10,8 +10,8 @@ Please refer to [Elsinore Server](https://github.com/DougEdey/SB_Elsinore_Server
 
 I have a basic Android app uploaded as well: [Elsinore APK](https://github.com/DougEdey/SB_Elsinore_Android/blob/master/bin/Elsinore.apk)
 
-![Android App PID](https://github.com/DougEdey/SB_Elsinore_Server/raw/master/img/PID_Elsinore.png)
-![Android App Temp](https://github.com/DougEdey/SB_Elsinore_Server/raw/master/img/Temp_Elsinore.png)
+![Android App PID](https://github.com/DougEdey/SB_Elsinore_Android/raw/master/img/PID_Elsinore.png)
+![Android App Temp](https://github.com/DougEdey/SB_Elsinore_Android/raw/master/img/Temp_Elsinore.png)
 
 I've designed it to run on Nexus 7 tablets using Android 4.0.4+ Settings are simple, just setting the hostname/port at the moment, with a refresh rate.
 
