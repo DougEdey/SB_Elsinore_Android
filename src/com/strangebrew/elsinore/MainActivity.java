@@ -382,6 +382,13 @@ public class MainActivity extends FragmentActivity {
     		cView.setTag("reset");
     	}
     	
+    	// also reset the input mode
+    	EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
+	 
+	   if(tView != null) {
+		  	tView.setTag("");
+	   }
+    	
     }
     
     /**
@@ -670,6 +677,10 @@ public class MainActivity extends FragmentActivity {
     	}
     	
     	// Manual mode
+    	// set the mode to manual, just incase
+    	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_manual);
+    	rButton.setChecked(true);
+    	
    		// no set point
 	   EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
 	   
@@ -780,7 +791,10 @@ public class MainActivity extends FragmentActivity {
     	}
     	
     	   // Auto Mode
-       	
+    	// set the mode to Auto, just incase
+    	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_auto);
+    	rButton.setChecked(true);
+    	
  	   // Set Point
      	EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
      	if(tView != null) {
@@ -897,6 +911,9 @@ public class MainActivity extends FragmentActivity {
     		hideAllInputs(rootView);
     		return;
     	}
+    	// set the mode to off, just incase
+    	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_off);
+    	rButton.setChecked(true);
     	
     	EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
     	// don't change anything if we're tagged
