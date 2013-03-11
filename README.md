@@ -8,7 +8,7 @@ Setting Up
 ==========
 Please refer to [Elsinore Server](https://github.com/DougEdey/SB_Elsinore_Server) for the Server side setup
 
-I have a basic Android app uploaded as well: [Elsinore APK](https://github.com/DougEdey/SB_Elsinore_Android/bin/Elsinore.apk)
+I have a basic Android app uploaded as well: [Elsinore APK](https://github.com/DougEdey/SB_Elsinore_Android/blob/master/bin/Elsinore.apk)
 
 ![Android App PID](https://github.com/DougEdey/SB_Elsinore_Server/raw/master/img/PID_Elsinore.png)
 ![Android App Temp](https://github.com/DougEdey/SB_Elsinore_Server/raw/master/img/Temp_Elsinore.png)
