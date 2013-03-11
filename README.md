@@ -18,3 +18,9 @@ I've designed it to run on Nexus 7 tablets using Android 4.0.4+ Settings are sim
 There's a basic timer, I'll be adding alerts in soon.
 
 Since this is early days development, it must be expected that there will be bugs! But please file a bug report, or better yet, a bug fix with a pull request.
+
+
+References
+==========
+
+Big thanks to [Freddy Martens](http://atstechlab.wordpress.com) for his work on the Dial Widget.  

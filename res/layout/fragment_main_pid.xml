@@ -70,9 +70,9 @@
                 atswidget:rangeErrorColor="0x9fff0000" 
                 atswidget:rangeErrorMinValue="232"
                 atswidget:rangeErrorMaxValue="234" 
-                atswidget:unitTitle="\u2103"
-                atswidget:lowerTitle="Created by Freddy Martens" 
-                atswidget:upperTitle="Visit http://atstechlab.wordpress.com" 
+                
+                atswidget:lowerTitle="Dial by Freddy Martens" 
+                atswidget:upperTitle="" 
                 atswidget:showGauge="false"
                 atswidget:showHand="true"
                 atswidget:showRange="true"

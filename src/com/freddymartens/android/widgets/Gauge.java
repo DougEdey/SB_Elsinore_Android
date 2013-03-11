@@ -240,9 +240,9 @@ public final class Gauge extends View {
 			String unitTitle       = a.getString(R.styleable.Dial_unitTitle);
 			String lowerTitle      = a.getString(R.styleable.Dial_lowerTitle);
 			String upperTitle      = a.getString(R.styleable.Dial_upperTitle);
-			if (unitTitle != null) this.unitTitle = unitTitle;
+			if (unitTitle != null) this.setUnitTitle(unitTitle);
 			if (lowerTitle != null) this.lowerTitle = lowerTitle;
-			if (upperTitle != null) this.upperTitle = upperTitle;
+			if (upperTitle != null) this.setUpperTitle(upperTitle);
 		}
 		degreeMinValue        = valueToAngle(getScaleMinValue())        + centerDegrees;
 		degreeMaxValue        = valueToAngle(getScaleMaxValue())        + centerDegrees;
@@ -544,9 +544,9 @@ public final class Gauge extends View {
 		// use the same rectangular but the spacing  between the title and the ranges
 		// is not equal for the upper and lower title and therefore, the upper title is 
 		// moved downwards.
-		canvas.drawTextOnPath(upperTitle, upperTitlePath, 0.0f, 0.02f, upperTitlePaint);				
+		canvas.drawTextOnPath(getUpperTitle(), upperTitlePath, 0.0f, 0.02f, upperTitlePaint);				
 		canvas.drawTextOnPath(lowerTitle, lowerTitlePath, 0.0f, 0.0f,  lowerTitlePaint);				
-		canvas.drawTextOnPath(unitTitle,  unitPath,       0.0f, 0.0f,  unitPaint);				
+		canvas.drawTextOnPath(getUnitTitle(),  unitPath,       0.0f, 0.0f,  unitPaint);				
 	}
 	
 	private void drawHand(Canvas canvas) {
@@ -629,11 +629,13 @@ public final class Gauge extends View {
 		if (showHand){
 			drawHand(canvas);
 		}
-
+		
+		
 		canvas.restore();
 	
 		// Calculate a new current value.
 		calculateCurrentValue();
+		
 	}
 
 	@Override
@@ -691,6 +693,7 @@ public final class Gauge extends View {
 			} else {
 				lastDialMoveTime = System.currentTimeMillis();				
 			}
+			
 			invalidate();
 		} else {
 			lastDialMoveTime = System.currentTimeMillis();
@@ -718,6 +721,7 @@ public final class Gauge extends View {
 
 	public void setScaleMaxValue(int scaleMaxValue) {
 		this.scaleMaxValue = scaleMaxValue;
+		invalidate(); // forces onDraw() to be called.
 	}
 
 	/**
@@ -725,6 +729,7 @@ public final class Gauge extends View {
 	 */
 	public int getScaleMinValue() {
 		return scaleMinValue;
+		
 	}
 
 	/**
@@ -732,6 +737,38 @@ public final class Gauge extends View {
 	 */
 	public void setScaleMinValue(int scaleMinValue) {
 		this.scaleMinValue = scaleMinValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the upperTitle
+	 */
+	public String getUpperTitle() {
+		return upperTitle;
+	}
+
+	/**
+	 * @param upperTitle the upperTitle to set
+	 */
+	public void setUpperTitle(String upperTitle) {
+		this.upperTitle = upperTitle;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the unitTitle
+	 */
+	public String getUnitTitle() {
+		return unitTitle;
+	}
+
+	/**
+	 * @param unitTitle the unitTitle to set
+	 */
+	public void setUnitTitle(String unitTitle) {
+		this.unitTitle = unitTitle;
+		regenerateBackground();
+		invalidate(); // forces onDraw() to be called.
 	}
 
 }

@@ -489,15 +489,18 @@ public class MainActivity extends FragmentActivity {
                 	tempGauge.setVisibility(Gauge.INVISIBLE);
                 	return;
                 }
-                tempGauge.setValue((float) d.temperature);
+                
                 // set the values according to the scale incoming
                 if(d.scale.equalsIgnoreCase("f")) {
+                	tempGauge.setUnitTitle("\u2109");
                 	tempGauge.setScaleMaxValue(240);
                 	tempGauge.setScaleMinValue(40);
                 } else {
+                	tempGauge.setUnitTitle("\u2103");
                 	tempGauge.setScaleMaxValue(100);
                 	tempGauge.setScaleMinValue(0);
                 }
+                tempGauge.setValue((float) d.temperature);
                 
                 if(d.getClass() == PID.class) {
                 	 EditText tView = (EditText) container.findViewById(R.id.target_temp);
