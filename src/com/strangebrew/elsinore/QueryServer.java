@@ -225,72 +225,74 @@ import com.strangebrew.elsinore.content.Temp;
     	private void iDataCheck(JSONObject iData, String device) {
     	
     		try {
-    			if(device.indexOf("pid") != -1){
-    				// this is the default mannerism, we have a PID
-    							
-    				// we have a temperature now
+				// check for a GPIO value
+				iData.getInt("gpio");
+			
+				// this is the default mannerism, we have a PID
+							
+				// we have a temperature now
+				
+				device = device.toUpperCase(Locale.CANADA);
+				device = device.replaceAll("_", " ");
+				
+				PID tPID = this.getPID(device);
+				if(tPID == null) {
+					//Log.i("No device", "adding: " + Integer.toString(ITEMS.size()+1) + device);
+					
+					Data.addItem(new PID(Integer.toString(Data.ITEMS.size()+1), device));
+					tPID = this.getPID(device);
+					//Log.i("added", "new PID: " + tPID.name);
+				}
     				
-    				device = device.toUpperCase(Locale.CANADA);
-    				device = device.replaceAll("_", " ");
     				
-    				PID tPID = this.getPID(device);
-    				if(tPID == null) {
-    					//Log.i("No device", "adding: " + Integer.toString(ITEMS.size()+1) + device);
-    					
-    					Data.addItem(new PID(Integer.toString(Data.ITEMS.size()+1), device));
-    					tPID = this.getPID(device);
-    					//Log.i("added", "new PID: " + tPID.name);
-    				}
-    				
-    				
-    		        tPID.temperature = Double.parseDouble(iData.getString("temp"));
-    				tPID.scale = iData.getString("scale");
-    				
-    		        // check the GPIO
-    		        if(iData.getInt("gpio") == -1) {
-    		        	return;
-    		        }
-    		        
-    		        // check to see if we need to feedback to the server
-    		        
-    		        if(tPID.feedback) {
-    		        	//Log.i("POST", "Creating params");
-    		        	String urlParameters = "dutycycle="+tPID.dutycycle +
-    		        			"&cycletime=" + tPID.cycletime +
-    		        			"&mode="+tPID.mode +
-    		        			"&setpoint=" + tPID.setpoint + 
-    		        			"&k=" +tPID.k_param +
-    		        			"&i=" +tPID.i_param +
-    		        			"&p=" +tPID.p_param;
-    		        	//Log.i("Post", "Params: " + url + "/?" + urlParameters);
-    		        	urlParameters = url + "/?" + urlParameters;
-    		        	// Create a new HttpClient and Post Header
-    		        	HttpClient httpclient = new DefaultHttpClient();
-    		        	HttpPost httppost = new HttpPost(url);
-    		        	
-    		        	try {
-    		        	    // Add your data
-    		        	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-    		        	    nameValuePairs.add(new BasicNameValuePair("form", tPID.name.substring(0, tPID.name.indexOf(" "))));
-    		        	    nameValuePairs.add(new BasicNameValuePair("mode", tPID.mode));
-    		        	    nameValuePairs.add(new BasicNameValuePair("dutycycle", Double.toString(tPID.dutycycle)));
-    		        	    nameValuePairs.add(new BasicNameValuePair("cycletime", Double.toString(tPID.cycletime)));
-    		        	    nameValuePairs.add(new BasicNameValuePair("setpoint", Double.toString(tPID.setpoint)));
-    		        	    nameValuePairs.add(new BasicNameValuePair("p", Double.toString(tPID.p_param)));
-    		        	    nameValuePairs.add(new BasicNameValuePair("i", Double.toString(tPID.i_param)));
-    		        	    nameValuePairs.add(new BasicNameValuePair("k", Double.toString(tPID.k_param)));
-    		        	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		        tPID.temperature = Double.parseDouble(iData.getString("temp"));
+				tPID.scale = iData.getString("scale");
+				
+		        // check the GPIO
+		        if(iData.getInt("gpio") == -1) {
+		        	return;
+		        }
+		        
+		        // check to see if we need to feedback to the server
+		        
+		        if(tPID.feedback) {
+		        	//Log.i("POST", "Creating params");
+		        	String urlParameters = "dutycycle="+tPID.dutycycle +
+		        			"&cycletime=" + tPID.cycletime +
+		        			"&mode="+tPID.mode +
+		        			"&setpoint=" + tPID.setpoint + 
+		        			"&k=" +tPID.k_param +
+		        			"&i=" +tPID.i_param +
+		        			"&p=" +tPID.p_param;
+		        	//Log.i("Post", "Params: " + url + "/?" + urlParameters);
+		        	urlParameters = url + "/?" + urlParameters;
+		        	// Create a new HttpClient and Post Header
+		        	HttpClient httpclient = new DefaultHttpClient();
+		        	HttpPost httppost = new HttpPost(url);
+		        	
+		        	try {
+		        	    // Add your data
+		        	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		        	    nameValuePairs.add(new BasicNameValuePair("form", tPID.name.substring(0, tPID.name.indexOf(" "))));
+		        	    nameValuePairs.add(new BasicNameValuePair("mode", tPID.mode));
+		        	    nameValuePairs.add(new BasicNameValuePair("dutycycle", Double.toString(tPID.dutycycle)));
+		        	    nameValuePairs.add(new BasicNameValuePair("cycletime", Double.toString(tPID.cycletime)));
+		        	    nameValuePairs.add(new BasicNameValuePair("setpoint", Double.toString(tPID.setpoint)));
+		        	    nameValuePairs.add(new BasicNameValuePair("p", Double.toString(tPID.p_param)));
+		        	    nameValuePairs.add(new BasicNameValuePair("i", Double.toString(tPID.i_param)));
+		        	    nameValuePairs.add(new BasicNameValuePair("k", Double.toString(tPID.k_param)));
+		        	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-    		        	    // Execute HTTP Post Request
-    		        	    HttpResponse response = httpclient.execute(httppost);
+		        	    // Execute HTTP Post Request
+		        	    HttpResponse response = httpclient.execute(httppost);
 
-    		        	} catch (ClientProtocolException e) {
-    		        	    // TODO Auto-generated catch block
-    		        	} catch (IOException e) {
-    		        	    // TODO Auto-generated catch block
-    		        	}		        	
-    		        	tPID.feedback = false;
-    		        	
+		        	} catch (ClientProtocolException e) {
+		        	    // TODO Auto-generated catch block
+		        	} catch (IOException e) {
+		        	    // TODO Auto-generated catch block
+		        	}		        	
+		        	tPID.feedback = false;
+		        	
     		        } else {
     		        
     			        // after this we should have good Data for the PID
@@ -305,33 +307,33 @@ import com.strangebrew.elsinore.content.Temp;
     			        
     		        }
     		        
-    			} else {
-    				// just probing the temperature
-    				// we have a temperature now
-    				device = device.toUpperCase(Locale.CANADA);
-    				device = device.replaceAll("_", " ");
-    				
-    				Temp tTemp = this.getTemp(device);
-    				
-    				
-    				if(tTemp == null) {
-    					//Log.i("No device", "adding: " + Integer.toString(ITEMS.size()+1) + device);
-    					
-    					Data.addItem(new Temp(Integer.toString(Data.ITEMS.size()+1), device));
-    					tTemp = this.getTemp(device);
-    				}
-    				
-    				tTemp.scale = iData.getString("scale");
-    				tTemp.temperature = Double.parseDouble(iData.getString("temp"));
-    				
-    				//Data.ITEMS.remove(tTemp);
-    			}
-    			
-    			
-    		} catch (JSONException je) {
-    			Log.i("error", device + je.getMessage());
-    			je.printStackTrace();
-    		} catch (NumberFormatException ne) {
+    		} catch (JSONException e) {
+    			try {
+					// just probing the temperature
+					// we have a temperature now
+					device = device.toUpperCase(Locale.CANADA);
+					device = device.replaceAll("_", " ");
+					
+					Temp tTemp = this.getTemp(device);
+					
+					
+					if(tTemp == null) {
+						//Log.i("No device", "adding: " + Integer.toString(ITEMS.size()+1) + device);
+						
+						Data.addItem(new Temp(Integer.toString(Data.ITEMS.size()+1), device));
+						tTemp = this.getTemp(device);
+					}
+					
+					tTemp.scale = iData.getString("scale");
+					tTemp.temperature = Double.parseDouble(iData.getString("temp"));
+					
+					//Data.ITEMS.remove(tTemp);
+			
+	    		} catch (JSONException je) {
+	    			Log.i("error", device + je.getMessage());
+	    			je.printStackTrace();
+	    		}
+	    	} catch (NumberFormatException ne) {
     			ne.printStackTrace();
     		} 
     	}

@@ -124,13 +124,13 @@ public final class Gauge extends View {
 	private float degreeOkMaxValue           = 0;
 
 	private int rangeWarningColor            = 0x9fff8800;
-	private int rangeWarningMinValue         = rangeOkMaxValue;
+	private int rangeWarningMinValue         = getRangeOkMaxValue();
 	private int rangeWarningMaxValue         = 80;
 	private float degreeWarningMinValue      = 0;
 	private float degreeWarningMaxValue      = 0;
 
 	private int rangeErrorColor              = 0x9fff0000;
-	private int rangeErrorMinValue           = rangeWarningMaxValue;
+	private int rangeErrorMinValue           = getRangeWarningMaxValue();
 	private int rangeErrorMaxValue           = 120;
 	private float degreeErrorMinValue        = 0;
 	private float degreeErrorMaxValue        = 0;
@@ -147,13 +147,13 @@ public final class Gauge extends View {
 	private static final float unitPosition  = 0.300f; // The distance from the rim to the unit
 	private static final float rimSize       = 0.02f;
 
-	private final float degreesPerNotch      = 360.0f/totalNotches;	
+	private float degreesPerNotch      = 360.0f/getTotalNotches();	
 	private static final int centerDegrees   =  -90; // the one in the top center (12 o'clock), this corresponds with -90 degrees
 
 	// hand dynamics 
 	private boolean dialInitialized         = false;
-	private float currentValue              = scaleCenterValue;
-	private float targetValue               = scaleCenterValue;
+	private float currentValue              = getScaleCenterValue();
+	private float targetValue               = getScaleCenterValue();
 	private float dialVelocity              = 0.0f;
 	private float dialAcceleration          = 0.0f;
 	private long lastDialMoveTime           = -1L;
@@ -221,22 +221,22 @@ public final class Gauge extends View {
 			showGauge              = a.getBoolean(R.styleable.Dial_showGauge,          showGauge);
 			showHand               = a.getBoolean(R.styleable.Dial_showHand,           showHand);
 
-			totalNotches           = a.getInt(R.styleable.Dial_totalNotches,           totalNotches);
+			setTotalNotches(a.getInt(R.styleable.Dial_totalNotches,           getTotalNotches()));
 			incrementPerLargeNotch = a.getInt(R.styleable.Dial_incrementPerLargeNotch, incrementPerLargeNotch);
-			incrementPerSmallNotch = a.getInt(R.styleable.Dial_incrementPerSmallNotch, incrementPerSmallNotch);
-			scaleCenterValue       = a.getInt(R.styleable.Dial_scaleCenterValue,       scaleCenterValue);
+			setIncrementPerSmallNotch(a.getInt(R.styleable.Dial_incrementPerSmallNotch, getIncrementPerSmallNotch()));
+			setScaleCenterValue(a.getInt(R.styleable.Dial_scaleCenterValue,       getScaleCenterValue()));
 			scaleColor             = a.getInt(R.styleable.Dial_scaleColor,             scaleColor);
 			setScaleMinValue(a.getInt(R.styleable.Dial_scaleMinValue,          getScaleMinValue()));
 			setScaleMaxValue(a.getInt(R.styleable.Dial_scaleMaxValue,          getScaleMaxValue()));
 			rangeOkColor           = a.getInt(R.styleable.Dial_rangeOkColor,           rangeOkColor);
-			rangeOkMinValue        = a.getInt(R.styleable.Dial_rangeOkMinValue,        rangeOkMinValue);
-			rangeOkMaxValue        = a.getInt(R.styleable.Dial_rangeOkMaxValue,        rangeOkMaxValue);
+			setRangeOkMinValue(a.getInt(R.styleable.Dial_rangeOkMinValue,        getRangeOkMinValue()));
+			setRangeOkMaxValue(a.getInt(R.styleable.Dial_rangeOkMaxValue,        getRangeOkMaxValue()));
 			rangeWarningColor      = a.getInt(R.styleable.Dial_rangeWarningColor,      rangeWarningColor);
-			rangeWarningMinValue   = a.getInt(R.styleable.Dial_rangeWarningMinValue,   rangeWarningMinValue);
-			rangeWarningMaxValue   = a.getInt(R.styleable.Dial_rangeWarningMaxValue,   rangeWarningMaxValue);
+			setRangeWarningMinValue(a.getInt(R.styleable.Dial_rangeWarningMinValue,   getRangeWarningMinValue()));
+			setRangeWarningMaxValue(a.getInt(R.styleable.Dial_rangeWarningMaxValue,   getRangeWarningMaxValue()));
 			rangeErrorColor        = a.getInt(R.styleable.Dial_rangeErrorColor,        rangeErrorColor);
-			rangeErrorMinValue     = a.getInt(R.styleable.Dial_rangeErrorMinValue,     rangeErrorMinValue);
-			rangeErrorMaxValue     = a.getInt(R.styleable.Dial_rangeErrorMaxValue,     rangeErrorMaxValue);
+			setRangeErrorMinValue(a.getInt(R.styleable.Dial_rangeErrorMinValue,     getRangeErrorMinValue()));
+			setRangeErrorMaxValue(a.getInt(R.styleable.Dial_rangeErrorMaxValue,     getRangeErrorMaxValue()));
 			String unitTitle       = a.getString(R.styleable.Dial_unitTitle);
 			String lowerTitle      = a.getString(R.styleable.Dial_lowerTitle);
 			String upperTitle      = a.getString(R.styleable.Dial_upperTitle);
@@ -246,12 +246,12 @@ public final class Gauge extends View {
 		}
 		degreeMinValue        = valueToAngle(getScaleMinValue())        + centerDegrees;
 		degreeMaxValue        = valueToAngle(getScaleMaxValue())        + centerDegrees;
-		degreeOkMinValue      = valueToAngle(rangeOkMinValue)      + centerDegrees;
-		degreeOkMaxValue      = valueToAngle(rangeOkMaxValue)      + centerDegrees;
-		degreeWarningMinValue = valueToAngle(rangeWarningMinValue) + centerDegrees;
-		degreeWarningMaxValue = valueToAngle(rangeWarningMaxValue) + centerDegrees;
-		degreeErrorMinValue   = valueToAngle(rangeErrorMinValue)   + centerDegrees;
-		degreeErrorMaxValue   = valueToAngle(rangeErrorMaxValue)   + centerDegrees;
+		degreeOkMinValue      = valueToAngle(getRangeOkMinValue())      + centerDegrees;
+		degreeOkMaxValue      = valueToAngle(getRangeOkMaxValue())      + centerDegrees;
+		degreeWarningMinValue = valueToAngle(getRangeWarningMinValue()) + centerDegrees;
+		degreeWarningMaxValue = valueToAngle(getRangeWarningMaxValue()) + centerDegrees;
+		degreeErrorMinValue   = valueToAngle(getRangeErrorMinValue())   + centerDegrees;
+		degreeErrorMaxValue   = valueToAngle(getRangeErrorMaxValue())   + centerDegrees;
 		
 		initDrawingTools();
 	}
@@ -501,19 +501,21 @@ public final class Gauge extends View {
 		canvas.drawOval(scaleRect, scalePaint);
 
 		canvas.save(Canvas.MATRIX_SAVE_FLAG);
-		for (int i = 0; i < totalNotches; ++i) {
+		for (int i = 0; i < getTotalNotches(); ++i) {
 			float y1 = scaleRect.top;
 			float y2 = y1 - 0.015f;
 			float y3 = y1 - 0.025f;
 			
 			int value = notchToValue(i);
 
-			if (i % (incrementPerLargeNotch/incrementPerSmallNotch) == 0) {
+			if (i % (incrementPerLargeNotch/getIncrementPerSmallNotch()) == 0) {
 				if (value >= getScaleMinValue() && value <= getScaleMaxValue()) {
 					// draw a nick
 					canvas.drawLine(0.5f, y1, 0.5f, y3, scalePaint);
 
 					String valueString = Integer.toString(value);
+					scalePaint.setTextSize(0.045f);
+					scalePaint.setLinearText(true);
 					// Draw the text 0.15 away from y3 which is the long nick.
 					canvas.drawText(valueString, 0.5f, y3 - 0.015f, scalePaint);
 				}
@@ -575,14 +577,14 @@ public final class Gauge extends View {
 			// to n -90 degrees.
 			float angle = valueToAngle(currentValue) - 90;
 	
-			if(targetValue <= rangeOkMaxValue){
+			if(targetValue <= getRangeOkMaxValue()){
 				canvas.drawArc(valueRect, degreeMinValue, angle - degreeMinValue, false, valueOkPaint);
 			}
-			if((targetValue > rangeOkMaxValue) && (targetValue <= rangeWarningMaxValue)){
+			if((targetValue > getRangeOkMaxValue()) && (targetValue <= getRangeWarningMaxValue())){
 				canvas.drawArc(valueRect, degreeMinValue, degreeOkMaxValue - degreeMinValue, false, valueOkPaint);
 				canvas.drawArc(valueRect, degreeWarningMinValue, angle - degreeWarningMinValue, false, valueWarningPaint);
 			}
-			if((targetValue > rangeWarningMaxValue) && (targetValue <= rangeErrorMaxValue)){
+			if((targetValue > getRangeWarningMaxValue()) && (targetValue <= getRangeErrorMaxValue())){
 				canvas.drawArc(valueRect, degreeMinValue, degreeOkMaxValue - degreeMinValue, false, valueOkPaint);
 				canvas.drawArc(valueRect, degreeWarningMinValue, degreeWarningMaxValue - degreeWarningMinValue, false, valueWarningPaint);
 				canvas.drawArc(valueRect, degreeErrorMinValue, angle - degreeErrorMinValue, false, valueErrorPaint);
@@ -603,14 +605,15 @@ public final class Gauge extends View {
 	 * The raw value calculation uses a constant so that each notch represents a value n + 2.
 	 */
 	private int notchToValue(int notch) {
-		int rawValue = ((notch < totalNotches / 2) ? notch : (notch - totalNotches)) * incrementPerSmallNotch;
-		int shiftedValue = rawValue + scaleCenterValue;
+		int rawValue = ((notch < getTotalNotches() / 2) ? notch : (notch - getTotalNotches())) * getIncrementPerSmallNotch();
+		int shiftedValue = rawValue + getScaleCenterValue();
 		return shiftedValue;
 	}
 	
 	private float valueToAngle(float value) {
 		// scaleCenterValue represents an angle of -90 degrees.
-		return (value - scaleCenterValue) / 2.0f * degreesPerNotch;
+		
+		return (value - getScaleCenterValue()) / (float) getIncrementPerSmallNotch() * degreesPerNotch;
 	}
 	
 	@Override
@@ -721,6 +724,7 @@ public final class Gauge extends View {
 
 	public void setScaleMaxValue(int scaleMaxValue) {
 		this.scaleMaxValue = scaleMaxValue;
+		
 		invalidate(); // forces onDraw() to be called.
 	}
 
@@ -769,6 +773,140 @@ public final class Gauge extends View {
 		this.unitTitle = unitTitle;
 		regenerateBackground();
 		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the scaleCenterValue
+	 */
+	public int getScaleCenterValue() {
+		return scaleCenterValue;
+	}
+
+	/**
+	 * @param scaleCenterValue the scaleCenterValue to set
+	 */
+	public void setScaleCenterValue(int scaleCenterValue) {
+		this.scaleCenterValue = scaleCenterValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the rangeOkMinValue
+	 */
+	public int getRangeOkMinValue() {
+		return rangeOkMinValue;
+	}
+
+	/**
+	 * @param rangeOkMinValue the rangeOkMinValue to set
+	 */
+	public void setRangeOkMinValue(int rangeOkMinValue) {
+		this.rangeOkMinValue = rangeOkMinValue;
+	}
+
+	/**
+	 * @return the rangeOkMaxValue
+	 */
+	public int getRangeOkMaxValue() {
+		return rangeOkMaxValue;
+	}
+
+	/**
+	 * @param rangeOkMaxValue the rangeOkMaxValue to set
+	 */
+	public void setRangeOkMaxValue(int rangeOkMaxValue) {
+		this.rangeOkMaxValue = rangeOkMaxValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the rangeWarningMinValue
+	 */
+	public int getRangeWarningMinValue() {
+		return rangeWarningMinValue;
+	}
+
+	/**
+	 * @param rangeWarningMinValue the rangeWarningMinValue to set
+	 */
+	public void setRangeWarningMinValue(int rangeWarningMinValue) {
+		this.rangeWarningMinValue = rangeWarningMinValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the rangeWarningMaxValue
+	 */
+	public int getRangeWarningMaxValue() {
+		return rangeWarningMaxValue;
+	}
+
+	/**
+	 * @param rangeWarningMaxValue the rangeWarningMaxValue to set
+	 */
+	public void setRangeWarningMaxValue(int rangeWarningMaxValue) {
+		this.rangeWarningMaxValue = rangeWarningMaxValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the rangeErrorMaxValue
+	 */
+	public int getRangeErrorMaxValue() {
+		return rangeErrorMaxValue;
+	}
+
+	/**
+	 * @param rangeErrorMaxValue the rangeErrorMaxValue to set
+	 */
+	public void setRangeErrorMaxValue(int rangeErrorMaxValue) {
+		this.rangeErrorMaxValue = rangeErrorMaxValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the rangeErrorMinValue
+	 */
+	public int getRangeErrorMinValue() {
+		return rangeErrorMinValue;
+	}
+
+	/**
+	 * @param rangeErrorMinValue the rangeErrorMinValue to set
+	 */
+	public void setRangeErrorMinValue(int rangeErrorMinValue) {
+		this.rangeErrorMinValue = rangeErrorMinValue;
+		invalidate(); // forces onDraw() to be called.
+	}
+
+	/**
+	 * @return the totalNotches
+	 */
+	public int getTotalNotches() {
+		return totalNotches;
+	}
+
+	/**
+	 * @param totalNotches the totalNotches to set
+	 */
+	public void setTotalNotches(int totalNotches) {
+		this.totalNotches = totalNotches;
+		degreesPerNotch      = 360.0f/getTotalNotches();	
+	}
+
+	/**
+	 * @return the incrementPerSmallNotch
+	 */
+	public int getIncrementPerSmallNotch() {
+		return incrementPerSmallNotch;
+	}
+
+	/**
+	 * @param incrementPerSmallNotch the incrementPerSmallNotch to set
+	 */
+	public void setIncrementPerSmallNotch(int incrementPerSmallNotch) {
+		this.incrementPerSmallNotch = incrementPerSmallNotch;
+		degreesPerNotch      = 360.0f/getTotalNotches();	
 	}
 
 }

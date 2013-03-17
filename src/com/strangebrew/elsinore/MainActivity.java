@@ -1,6 +1,5 @@
 package com.strangebrew.elsinore;
 
-import java.util.Iterator;
 import java.util.Locale;
 
 import com.freddymartens.android.widgets.Gauge;
@@ -24,15 +23,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -303,7 +299,6 @@ public class MainActivity extends FragmentActivity {
     public void startChrono(View v) {
     	// do something with the chrono
     	View rootView = (View) v.getParent();
-    	TextView cText = (TextView) rootView.findViewById(R.id.chrono_label);
     	
     	Chronometer cView = (Chronometer) rootView.findViewById(R.id.chrono);
     	Button cButton = (Button) rootView.findViewById(R.id.start_timer);
@@ -367,7 +362,7 @@ public class MainActivity extends FragmentActivity {
     public void resetChrono(View v) {
     	// do something with the chrono
     	View rootView = (View) v.getParent();
-    	TextView cText = (TextView) rootView.findViewById(R.id.chrono_label);
+    	
     	
     	Chronometer cView = (Chronometer) rootView.findViewById(R.id.chrono);
     	
@@ -384,10 +379,9 @@ public class MainActivity extends FragmentActivity {
     	
     	// also reset the input mode
     	EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
-	 
-	   if(tView != null) {
-		  	tView.setTag("");
-	   }
+    	if(tView != null) {
+    		tView.setTag("");
+    	}
     	
     }
     
@@ -415,7 +409,6 @@ public class MainActivity extends FragmentActivity {
                 Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_main_pid, container, false);
             rootView.setTag(getArguments().getString(ARG_SECTION_TITLE));
-            Bundle args = getArguments();
             dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
             
             Log.i("Dummy", getArguments().getString(ARG_SECTION_TITLE));
@@ -499,17 +492,38 @@ public class MainActivity extends FragmentActivity {
                 
                 // set the values according to the scale incoming
                 if(d.scale.equalsIgnoreCase("f")) {
-                	tempGauge.setUnitTitle("\u2109");
                 	tempGauge.setScaleMaxValue(240);
                 	tempGauge.setScaleMinValue(40);
+                	tempGauge.setScaleCenterValue(140);
+                	tempGauge.setRangeOkMinValue(140);
+                	tempGauge.setRangeOkMaxValue(150);
+                	tempGauge.setRangeWarningMinValue(165);
+                	tempGauge.setRangeWarningMaxValue(175);
+                	tempGauge.setRangeErrorMinValue(212);
+                	tempGauge.setRangeErrorMaxValue(212);
+                	tempGauge.setTotalNotches(120);
+                	tempGauge.setIncrementPerSmallNotch(2);
+                	
+                	tempGauge.setUnitTitle("\u2109");
                 } else {
-                	tempGauge.setUnitTitle("\u2103");
-                	tempGauge.setScaleMaxValue(100);
+                	tempGauge.setScaleCenterValue(55);
+                	tempGauge.setScaleMaxValue(110);
                 	tempGauge.setScaleMinValue(0);
+                	
+                	tempGauge.setRangeOkMinValue(70);
+                	tempGauge.setRangeOkMaxValue(80);
+                	tempGauge.setRangeWarningMinValue(80);
+                	tempGauge.setRangeWarningMaxValue(90);
+                	tempGauge.setRangeErrorMinValue(90);
+                	tempGauge.setRangeErrorMaxValue(100);
+                	tempGauge.setTotalNotches(110);
+                	tempGauge.setIncrementPerSmallNotch(1);
+                	tempGauge.setUnitTitle("\u2103");
                 }
                 tempGauge.setValue((float) d.temperature);
                 
-                if(d.getClass() == PID.class) {
+                try { 
+                		PID temp = (PID) d;
                 	 EditText tView = (EditText) container.findViewById(R.id.target_temp);
           		   
            		  
@@ -526,7 +540,7 @@ public class MainActivity extends FragmentActivity {
           	    		}
           		   }
           		   
-                	PID temp = (PID) d;
+                	
                 	if(temp.mode.equalsIgnoreCase("off")) {
                 		// no set point
             			switchOffPid(container, d);
@@ -537,8 +551,7 @@ public class MainActivity extends FragmentActivity {
                 	if(temp.mode.equalsIgnoreCase("auto")) {
                 		switchAutoPid(container, d);
                 	}
-                } else { // this is a Temp probe
-                	Temp tTemp = (Temp) d;
+                } catch (ClassCastException e) { // this is a Temp probe
                 	hideAllInputs(container);
                 }
                 
@@ -676,7 +689,8 @@ public class MainActivity extends FragmentActivity {
     		return;
     	}
     	
-    	// Manual mode
+    	// Manual mode\
+    	showMode(rootView);
     	// set the mode to manual, just incase
     	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_manual);
     	rButton.setChecked(true);
@@ -791,6 +805,7 @@ public class MainActivity extends FragmentActivity {
     	}
     	
     	   // Auto Mode
+    	showMode(rootView);
     	// set the mode to Auto, just incase
     	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_auto);
     	rButton.setChecked(true);
@@ -911,6 +926,8 @@ public class MainActivity extends FragmentActivity {
     		hideAllInputs(rootView);
     		return;
     	}
+    	
+    	showMode(rootView);
     	// set the mode to off, just incase
     	RadioButton rButton = (RadioButton) rootView.findViewById(R.id.mode_off);
     	rButton.setChecked(true);
@@ -1014,5 +1031,29 @@ public class MainActivity extends FragmentActivity {
 		if(lView != null) {
 			lView.setVisibility(TextView.INVISIBLE);
 		}
+    }
+    
+    private void showMode(View rootView) {
+    	RadioButton r = (RadioButton) rootView.findViewById(R.id.mode_auto);
+    	if(r != null) {
+    		r.setVisibility(RadioButton.VISIBLE);	
+    	}
+    	r = (RadioButton) rootView.findViewById(R.id.mode_off);
+    	if(r != null) {
+    		r.setVisibility(RadioButton.VISIBLE);	
+    	}
+    	
+    	
+    	r = (RadioButton) rootView.findViewById(R.id.mode_manual);
+    	if(r != null) {
+    		r.setVisibility(RadioButton.VISIBLE);	
+    	}
+    	
+    	RadioGroup rGroup = (RadioGroup) rootView.findViewById(R.id.radio_mode);
+    	if(rGroup != null) {
+    		rGroup.setVisibility(RadioGroup.VISIBLE);	
+    	}
+    	
+    
     }
 }
