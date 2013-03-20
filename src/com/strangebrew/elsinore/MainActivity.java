@@ -1,5 +1,7 @@
 package com.strangebrew.elsinore;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import com.freddymartens.android.widgets.Gauge;
@@ -10,9 +12,12 @@ import com.strangebrew.elsinore.content.Temp;
 
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -29,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -126,38 +132,40 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a DummySectionFragment (defined as a static inner class
-            // below) with the page number as its lone argument.
-            Fragment fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putString(DummySectionFragment.ARG_SECTION_TITLE, this.getPageTitle(position).toString());
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-            fragment.setArguments(args);
-            return fragment;
+            
+        	// if we are using the summary page, return it, otherwise return the appropriate device
+        	if(position == 0) {
+        		Fragment fragment = new SummarySectionFragment();
+	            Bundle args = new Bundle();
+	            args.putString(SummarySectionFragment.ARG_SECTION_TITLE, this.getPageTitle(position).toString());
+	            args.putInt(SummarySectionFragment.ARG_SECTION_NUMBER, position + 1);
+	            fragment.setArguments(args);
+	            return fragment;
+        	} else {
+	            Fragment fragment = new DeviceSectionFragment();
+	            Bundle args = new Bundle();
+	            args.putString(DeviceSectionFragment.ARG_SECTION_TITLE, this.getPageTitle(position).toString());
+	            args.putInt(DeviceSectionFragment.ARG_SECTION_NUMBER, position + 1);
+	            fragment.setArguments(args);
+	            return fragment;
+        	}
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-        	return Data.ITEMS.size();
-            //return 3;
+            // increment the number of items by one to account for the Summary page
+        	return (Data.ITEMS.size()+1);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
-            return Data.ITEMS.get(position).name.toUpperCase();
-            /*switch (position) {
-                case 0:
-                	
-                    //return getString(R.string.title_section_hlt).toUpperCase(l);
-                case 1:
-                	
-                    return getString(R.string.title_section_mlt).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section_kettle).toUpperCase(l);
-            }*/
-            //return null;
+            
+            if(position == 0) {
+            	return "Brew Day";
+            }
+            return Data.ITEMS.get(position-1).name.toUpperCase(l);
+            
         }
     }
     
@@ -296,6 +304,7 @@ public class MainActivity extends FragmentActivity {
         }
       }
   
+     
     public void startChrono(View v) {
     	// do something with the chrono
     	View rootView = (View) v.getParent();
@@ -323,7 +332,7 @@ public class MainActivity extends FragmentActivity {
     			try {
     				time = Long.parseLong(cButton.getTag().toString());
     				// time has the time we stopped with in it, so subtract this from the current time
-    				
+    			
     				cView.setBase(SystemClock.elapsedRealtime() - time);
     			} catch (NumberFormatException e) {
     				// don't do anything
@@ -386,10 +395,9 @@ public class MainActivity extends FragmentActivity {
     }
     
     /**
-     * A dummy fragment representing a section of the app, but that simply
-     * displays dummy text.
+     * A device fragment representing a section of the app
      */
-    public static class DummySectionFragment extends Fragment {
+    public static class DeviceSectionFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -400,7 +408,7 @@ public class MainActivity extends FragmentActivity {
         public static TextView dummyTextView;
         public static View rootView;
         
-        public DummySectionFragment() {
+        public DeviceSectionFragment() {
         
         }
 
@@ -454,7 +462,201 @@ public class MainActivity extends FragmentActivity {
       
     }
     
-   
+    /**
+     * A device fragment representing a section of the app
+     */
+    public static class SummarySectionFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        public static final String ARG_SECTION_NUMBER = "section_number";
+        public static final String ARG_SECTION_TITLE = "section_title";
+        public static Gauge tempGauge;
+        public static TextView dummyTextView;
+        public static View rootView;
+        
+        public SummarySectionFragment() {
+        
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            rootView = inflater.inflate(R.layout.fragment_brewday, container, false);
+            rootView.setTag(getArguments().getString(ARG_SECTION_TITLE));
+            
+            OnLongClickListener longPressTime = new OnLongClickListener() {
+	
+	        	public void reallySetTime(TextView v) {
+	            	// we now want to forcefull overwrite the textView
+	            	SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss dd/MM/yyyy");
+	            	String format = s.format(new Date());
+	            	
+	            	v.setText(format);
+	            	
+	            }
+	            
+	        	public void needPrereq(int failId, int prereqId, Context c) {
+	        		AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
+   	    		 
+    	            // Setting Dialog Title
+    	            alertDialog.setTitle("Can't set this time");
+    	     
+    	            // Setting Dialog Message
+    	            alertDialog.setMessage("Cannot set " + c.getString(failId) + " because " + 
+    	            		c.getString(prereqId) + " is not set");
+    	            
+    	            alertDialog.setNeutralButton(R.string.neutral, new DialogInterface.OnClickListener() {
+    	                public void onClick(DialogInterface dialog, int which) {
+    	                // Write your code here to execute after dialog closed
+    	                	return;
+    	                }
+    	        });
+    	     
+	        	}
+	           
+	        	public  void setTime(View v) {
+	        		// check to see if the pre req inputs are done
+	        		View rootView = v.getRootView();
+	        		TextView start = null;
+	        		
+	        		switch(v.getId()) {
+	        			case R.id.start_time:
+	        				 rootView.findViewById(R.id.mash_in_time).setEnabled(true);
+	        				 break;
+		        		case R.id.mash_in_time:
+		        			start = (TextView) rootView.findViewById(R.id.start_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.mash_in_time, R.id.start_time, v.getContext());
+		        				return;
+		        			}
+		        			rootView.findViewById(R.id.mash_out_time).setEnabled(true);
+		        			break;
+		        		case R.id.mash_out_time:
+		        			start = (TextView) rootView.findViewById(R.id.mash_in_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.mash_out_time, R.id.mash_out_time, v.getContext());
+		        				return;
+		        			}
+		        			rootView.findViewById(R.id.boil_start_time).setEnabled(true);
+		        			break;
+		        		case R.id.boil_start_time:
+		        			start = (TextView) rootView.findViewById(R.id.mash_out_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.boil_start_time, R.id.mash_out_time, v.getContext());
+		        				return;
+		        			}
+		        			rootView.findViewById(R.id.boil_end_time).setEnabled(true);
+		        			break;
+		        		case R.id.boil_end_time:
+		        			start = (TextView) rootView.findViewById(R.id.boil_start_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.boil_end_time, R.id.boil_start_time, v.getContext());
+		        				return;
+		        			}
+		        			rootView.findViewById(R.id.cool_start_time).setEnabled(true);
+		        			break;
+		        		case R.id.cool_start_time:
+		        			start = (TextView) rootView.findViewById(R.id.boil_end_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.cool_start_time, R.id.boil_end_time, v.getContext());
+		        				return;
+		        			}
+		        			rootView.findViewById(R.id.cool_end_time).setEnabled(true);
+		        			break;
+		        		case R.id.cool_end_time:
+		        			start = (TextView) rootView.findViewById(R.id.cool_start_time);
+		        			if(start.getText().toString().equals("")) {
+		        				needPrereq(R.id.cool_end_time, R.id.cool_start_time, v.getContext());
+		        				return;
+		        			}
+		        			break;
+	        		}
+	        		
+        	    	// someone has pressed the input long enough to set it to the current time
+        	    	final TextView tView = (TextView) v;
+        	    	
+        	    	Log.i("SetTime", ":" + tView.getText() +":");
+        	    	if(!tView.getText().toString().equals("")) {
+        	    		AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+        	    		 
+        	            // Setting Dialog Title
+        	            alertDialog.setTitle("Confirm Overwrite...");
+        	     
+        	            // Setting Dialog Message
+        	            alertDialog.setMessage("Are you sure you want to overwrite the time?");
+        	     
+        	            // Setting Icon to Dialog
+        	            //alertDialog.setIcon(R.drawable.delete);
+        	     
+        	            // Setting Positive "Yes" Button
+        	            alertDialog.setPositiveButton(R.string.positive, new OnClickListener() {
+        	            	@Override
+        	                public void onClick(DialogInterface dialog,int which) {
+        	     
+        	                // Write your code here to invoke YES event
+        	            		reallySetTime(tView);
+        	                }
+        	            });
+        	            
+        	                   // Setting Negative "NO" Button
+        	            alertDialog.setNegativeButton(R.string.negative, new OnClickListener() {
+        	            	@Override
+        	                public void onClick(DialogInterface dialog, int which) {
+        	                // Write your code here to invoke NO event
+        	                
+        	                dialog.cancel();
+        	                }
+
+        	            });
+        	     
+        	            // Showing Alert Message
+        	            alertDialog.show();
+        	            
+        	            
+        	    	} else {
+        	    		reallySetTime(tView);
+        	    	}
+        	    }
+        	    
+        	 	@Override
+				public boolean onLongClick(View v) {
+					setTime(v);
+					return false;
+				}
+            	
+            };
+            
+            rootView.findViewById(R.id.start_time).setOnLongClickListener(longPressTime);
+            
+            rootView.findViewById(R.id.mash_in_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.mash_in_time).setEnabled(false);
+            rootView.findViewById(R.id.mash_out_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.mash_out_time).setEnabled(false);
+
+            rootView.findViewById(R.id.boil_start_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.boil_start_time).setEnabled(false);
+            rootView.findViewById(R.id.boil_end_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.boil_end_time).setEnabled(false);
+            
+            rootView.findViewById(R.id.cool_start_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.cool_start_time).setEnabled(false);
+            rootView.findViewById(R.id.cool_end_time).setOnLongClickListener(longPressTime);
+            rootView.findViewById(R.id.cool_end_time).setEnabled(false);
+            
+            return rootView;
+        }
+        
+        @Override 
+        public void onResume() {
+        	super.onResume();
+        	// not going to do anything here
+        	return;
+               
+        }
+      
+    }
     
     /* Setup the BroadcastReceiver so that we know when the data has changed */
     public class ResponseReceiver extends BroadcastReceiver {

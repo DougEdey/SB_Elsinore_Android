@@ -67,4 +67,16 @@
    <string name="ChronoStart">Chrono Start</string>
    <string name="ChronoReset">Chrono Reset</string>
    
+   <string name="label_start_time">Brew Day Start</string>
+   <string name="label_mash_in">Mash In</string>
+   <string name="label_mash_out">Mash Out</string>
+   <string name="label_boil_start">Boil Start</string>
+   <string name="label_boil_end">Boil End</string>
+   <string name="label_cool_start">Cool Start</string>
+   <string name="label_cool_end">Cool End</string>
+   
+   <string name="positive">Yes</string>
+   <string name="negative">No</string>
+   <string name="neutral">OK</string>
+   
 </resources>

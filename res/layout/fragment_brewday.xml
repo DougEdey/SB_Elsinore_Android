@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/start_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/start_time"
+        android:layout_alignBottom="@+id/start_time"
+        android:layout_toLeftOf="@+id/start_time"
+        android:text="@string/label_start_time" />
+    
+    <EditText
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:inputType="datetime" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/mash_in_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mash_in_time"
+        android:layout_alignBottom="@+id/mash_in_time"
+        android:layout_toLeftOf="@+id/mash_in_time"
+        android:text="@string/label_mash_in" />
+    
+    <EditText
+        android:id="@+id/mash_in_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/start_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="datetime" />
+
+    <TextView
+        android:id="@+id/mash_out_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mash_out_time"
+        android:layout_alignBottom="@+id/mash_out_time"
+        android:layout_toLeftOf="@+id/mash_out_time"
+        android:text="@string/label_mash_out" />
+    
+    <EditText
+        android:id="@+id/mash_out_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mash_in_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="datetime" />
+
+    <TextView
+        android:id="@+id/boil_start_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/boil_start_time"
+        android:layout_alignBottom="@+id/boil_start_time"
+        android:layout_toLeftOf="@+id/boil_start_time"
+        android:text="@string/label_boil_start" />
+    
+    <EditText
+        android:id="@+id/boil_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mash_out_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="datetime" />
+
+     <TextView
+        android:id="@+id/boil_end_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/boil_end_time"
+        android:layout_alignBottom="@+id/boil_end_time"
+        android:layout_toLeftOf="@+id/boil_end_time"
+        android:text="@string/label_boil_end" />
+    
+    <EditText
+        android:id="@+id/boil_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/boil_start_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="time" />
+
+    <TextView
+        android:id="@+id/cool_start_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cool_start_time"
+        android:layout_alignBottom="@+id/cool_start_time"
+        android:layout_toLeftOf="@+id/cool_start_time"
+        android:text="@string/label_cool_start" 
+        android:longClickable="true"/>
+    
+    <EditText
+        android:id="@+id/cool_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/boil_end_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="datetime" />
+
+    <TextView
+        android:id="@+id/cool_end_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cool_end_time"
+        android:layout_alignBottom="@+id/cool_end_time"
+        android:layout_toLeftOf="@+id/cool_end_time"
+        android:text="@string/label_cool_end" />
+    <EditText
+        android:id="@+id/cool_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cool_start_time"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="datetime" />
+
+    
+
+</RelativeLayout>
