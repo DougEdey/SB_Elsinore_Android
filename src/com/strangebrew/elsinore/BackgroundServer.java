@@ -28,6 +28,7 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.strangebrew.elsinore.R;
 import com.strangebrew.elsinore.content.Data;
 import com.strangebrew.elsinore.content.Device;
@@ -438,6 +439,7 @@ public class BackgroundServer extends IntentService {
 					}
 					tPID.setpoint = iData.getDouble("setpoint");
 					Log.i("TEMP", "Temp is: " + tPID.temperature);
+					tPID.elapsed = iData.getDouble("elapsed");
 					Data.ITEMS.remove(tPID);
 					Data.ITEMS.add(tPID);
 				}
@@ -461,7 +463,7 @@ public class BackgroundServer extends IntentService {
 
 				tTemp.scale = iData.getString("scale");
 				tTemp.temperature = Double.parseDouble(iData.getString("temp"));
-
+				tTemp.elapsed = iData.getDouble("elapsed");
 				Data.ITEMS.remove(tTemp);
 				Data.ITEMS.add(tTemp);
 			}

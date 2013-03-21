@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import com.freddymartens.android.widgets.Gauge;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.jjoe64.graphview.LineGraphView;
 import com.strangebrew.elsinore.content.Data;
 import com.strangebrew.elsinore.content.Device;
 import com.strangebrew.elsinore.content.PID;
@@ -21,6 +26,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -30,17 +37,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
@@ -392,6 +402,12 @@ public class MainActivity extends FragmentActivity {
     		tView.setTag("");
     	}
     	
+    	// get the current device and clear it
+    	Device d = Data.getFuzzyDevice(rootView.getTag().toString());
+    	if(d != null) {
+    		d.deviceSeries.resetData(new GraphViewData[0]);
+    	}
+    	
     }
     
     /**
@@ -415,29 +431,66 @@ public class MainActivity extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
+        	
             rootView = inflater.inflate(R.layout.fragment_main_pid, container, false);
             rootView.setTag(getArguments().getString(ARG_SECTION_TITLE));
             dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+            String cDevice = getArguments().getString(ARG_SECTION_TITLE);
             
-            Log.i("Dummy", getArguments().getString(ARG_SECTION_TITLE));
-            
-            if(Data.getFuzzyDevice(getArguments().getString(ARG_SECTION_TITLE)) == null) {
+            if(Data.getFuzzyDevice(cDevice) == null) {
             	hideAllInputs(rootView);
             	tempGauge = (Gauge) rootView.findViewById(R.id.temp_meter);
             	if(tempGauge != null) {
             		tempGauge.setVisibility(Gauge.INVISIBLE);
             		
             	}
-            	// log 
+            	
+            	
             	
             	return rootView;
             	
             }
-            dummyTextView.setText(getArguments().getString(ARG_SECTION_TITLE));
+            Device d = Data.getFuzzyDevice(cDevice);
+            dummyTextView.setText(cDevice);
             
-             tempGauge = (Gauge) rootView.findViewById(R.id.temp_meter);
-            tempGauge.setValue(175f);
-            Log.i("Gauge", "Set value to 175f");
+            tempGauge = (Gauge) rootView.findViewById(R.id.temp_meter);
+            tempGauge.setValue(0f);
+            
+            // add graph log the temperature to the graph
+            TypedValue tv = new TypedValue();
+            rootView.getContext().getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+            int textColor = getResources().getColor(tv.resourceId);
+            
+            LineGraphView graphView = new LineGraphView(container.getContext() , cDevice ) {
+            	@Override
+            	protected String formatLabel(double value, boolean isValueX) {
+            		if (isValueX) {
+            			// convert unix time to human time
+            			return SimpleDateFormat.getTimeInstance().format(new Date((long) value));
+            		} else return super.formatLabel(value, isValueX); // let the y-value be normal-formatted
+            	}
+            };
+            
+
+            graphView.getGraphViewStyle().setHorizontalLabelsColor(textColor);
+            graphView.getGraphViewStyle().setVerticalLabelsColor(textColor);
+            graphView.setDrawBackground(true);
+            graphView.addSeries(d.deviceSeries);
+            graphView.setScrollable(true);
+            graphView.setScalable(false);
+            graphView.setTag("graph");
+
+            
+            
+            // replace the current graph
+            RelativeLayout pidLayout = (RelativeLayout) rootView.findViewById(R.id.pid_layout);
+            
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            params.addRule(RelativeLayout.BELOW, R.id.submit_settings);
+            
+            pidLayout.addView(graphView, params);
             return rootView;
         }
         
@@ -723,6 +776,11 @@ public class MainActivity extends FragmentActivity {
                 	tempGauge.setUnitTitle("\u2103");
                 }
                 tempGauge.setValue((float) d.temperature);
+                if(d.deviceSeries != null) {
+                	LineGraphView tempGraph = (LineGraphView) container.findViewWithTag("graph");
+                	d.deviceSeries.appendData(new GraphViewData(d.elapsed, d.temperature), true);
+					tempGraph.redrawAll();
+				}
                 
                 try { 
                 		PID temp = (PID) d;
