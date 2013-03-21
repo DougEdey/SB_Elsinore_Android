@@ -466,7 +466,7 @@ public class MainActivity extends FragmentActivity {
             	protected String formatLabel(double value, boolean isValueX) {
             		if (isValueX) {
             			// convert unix time to human time
-            			return SimpleDateFormat.getTimeInstance().format(new Date((long)(value*1000000)));
+            			return SimpleDateFormat.getTimeInstance().format(new Date((long)(value)));
             		} else return super.formatLabel(value, isValueX); // let the y-value be normal-formatted
             	}
             };
@@ -828,110 +828,115 @@ public class MainActivity extends FragmentActivity {
     	
     	RadioButton r = (RadioButton) rootView.findViewById(R.id.mode_auto);
     	if(r != null) {
-    		r.setVisibility(RadioButton.INVISIBLE);	
+    		r.setVisibility(RadioButton.GONE);	
     	}
     	r = (RadioButton) rootView.findViewById(R.id.mode_off);
     	if(r != null) {
-    		r.setVisibility(RadioButton.INVISIBLE);	
+    		r.setVisibility(RadioButton.GONE);	
     	}
     	
     	r = (RadioButton) rootView.findViewById(R.id.mode_auto);
     	if(r != null) {
-    		r.setVisibility(RadioButton.INVISIBLE);	
+    		r.setVisibility(RadioButton.GONE);	
     	}
     	
     	r = (RadioButton) rootView.findViewById(R.id.mode_manual);
     	if(r != null) {
-    		r.setVisibility(RadioButton.INVISIBLE);	
+    		r.setVisibility(RadioButton.GONE);	
     	}
     	
     	RadioGroup rGroup = (RadioGroup) rootView.findViewById(R.id.radio_mode);
     	if(rGroup != null) {
-    		rGroup.setVisibility(RadioGroup.INVISIBLE);	
+    		rGroup.setVisibility(RadioGroup.GONE);	
     	}
     	
 	   EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
 	   if(tView != null) {
 		   tView.setSelected(false);
-				tView.setVisibility(EditText.INVISIBLE);
+				tView.setVisibility(EditText.GONE);
 	   }
 	   TextView lView = (TextView) rootView.findViewById(R.id.label_target_temp);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
 			// Duty Cycle
 	    tView = (EditText) rootView.findViewById(R.id.duty_cycle);
 	    if(tView != null) {
 	    	tView.setSelected(false);
-    	   	tView.setVisibility(EditText.INVISIBLE);    	   	
+    	   	tView.setVisibility(EditText.GONE);    	   	
 	    }
 	    
 	    lView = (TextView) rootView.findViewById(R.id.label_duty_cycle);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
 		// Duty Time
     	tView = (EditText) rootView.findViewById(R.id.cycle_time);
     	if(tView != null) {
     		tView.setSelected(false);
-        	tView.setVisibility(EditText.INVISIBLE);
+        	tView.setVisibility(EditText.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.label_cycle_time);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
        	// P
     	tView = (EditText) rootView.findViewById(R.id.p_input);
     	if(tView != null) {
     		tView.setSelected(false);
-        	tView.setVisibility(EditText.INVISIBLE);
+        	tView.setVisibility(EditText.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.label_p);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.unit_p);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
        	// I
     	tView = (EditText) rootView.findViewById(R.id.i_input);
     	if(tView != null) {
     		tView.setSelected(false);
-        	tView.setVisibility(EditText.INVISIBLE);
+        	tView.setVisibility(EditText.GONE);
    		}
     	
     	lView = (TextView) rootView.findViewById(R.id.label_i);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.unit_i);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
        	// K
     	tView = (EditText) rootView.findViewById(R.id.k_input);
     	if(tView != null) {
     		tView.setSelected(false);
-        	tView.setVisibility(EditText.INVISIBLE);
+        	tView.setVisibility(EditText.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.label_k);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
     	}
     	
     	lView = (TextView) rootView.findViewById(R.id.unit_k);
     	if(lView != null) {
-    		lView.setVisibility(TextView.INVISIBLE);
+    		lView.setVisibility(TextView.GONE);
+    	}
+    	
+    	Button lButton = (Button) rootView.findViewById(R.id.submit_settings);
+    	if(lButton != null) {
+    		lButton.setVisibility(Button.GONE);
     	}
     }
     

@@ -463,7 +463,7 @@ public class BackgroundServer extends IntentService {
 
 				tTemp.scale = iData.getString("scale");
 				tTemp.temperature = Double.parseDouble(iData.getString("temp"));
-				tTemp.elapsed = (double) iData.getLong("elapsed")/1000000;
+				tTemp.elapsed = (double) iData.getLong("elapsed");
 				Data.ITEMS.remove(tTemp);
 				Data.ITEMS.add(tTemp);
 			}

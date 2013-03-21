@@ -247,6 +247,7 @@ import com.strangebrew.elsinore.content.Temp;
     				
 		        tPID.temperature = Double.parseDouble(iData.getString("temp"));
 				tPID.scale = iData.getString("scale");
+				tPID.elapsed= iData.getLong("elapsed");
 				
 		        // check the GPIO
 		        if(iData.getInt("gpio") == -1) {
