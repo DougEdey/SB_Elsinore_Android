@@ -466,7 +466,7 @@ public class MainActivity extends FragmentActivity {
             	protected String formatLabel(double value, boolean isValueX) {
             		if (isValueX) {
             			// convert unix time to human time
-            			return SimpleDateFormat.getTimeInstance().format(new Date((long) value));
+            			return SimpleDateFormat.getTimeInstance().format(new Date((long)(value*1000000)));
             		} else return super.formatLabel(value, isValueX); // let the y-value be normal-formatted
             	}
             };

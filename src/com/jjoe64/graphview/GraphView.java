@@ -290,6 +290,7 @@ abstract public class GraphView extends LinearLayout {
 		graphViewContentView = new GraphViewContentView(context);
 		addView(graphViewContentView, new LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
+		
 	}
 
 	public GraphViewStyle getGraphViewStyle() {
@@ -309,8 +310,8 @@ abstract public class GraphView extends LinearLayout {
 			// viewport
 			List<GraphViewData> listData = new ArrayList<GraphViewData>();
 			for (int i = 0; i < values.length; i++) {
-						
-				if ((values[i].valueX - viewportStart) <= 0) {
+				// if viewportsize is 0 we show everything
+				if (viewportSize == 0 || values[i].valueX >= viewportStart) {
 					if (values[i].valueX > viewportStart + viewportSize) {
 						listData.add(values[i]); // one more for nice scrolling
 						break;
