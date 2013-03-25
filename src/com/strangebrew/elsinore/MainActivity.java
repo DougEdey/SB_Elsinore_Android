@@ -272,14 +272,21 @@ public class MainActivity extends FragmentActivity {
            Log.i("Updating PID", "Could not parse Duty Cycle as a double");
         }
 
-        tText = (EditText) rootView.findViewById(R.id.cycle_time);
+        tText = (EditText) rootView.findViewById(R.id.k_input);
         try {
            tK = Double.parseDouble(tText.getText().toString());
         } catch (NumberFormatException ne) {
            Log.i("Updating PID", "Could not parse K as a double");
         }
 
-        tText = (EditText) rootView.findViewById(R.id.cycle_time);
+        tText = (EditText) rootView.findViewById(R.id.i_input);
+        try {
+           tI = Double.parseDouble(tText.getText().toString());
+        } catch (NumberFormatException ne) {
+           Log.i("Updating PID", "Could not parse I as a double");
+        }
+
+        tText = (EditText) rootView.findViewById(R.id.p_input);
         try {
      	    tP = Double.parseDouble(tText.getText().toString());
         } catch (NumberFormatException ne) {

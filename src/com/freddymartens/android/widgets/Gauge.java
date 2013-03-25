@@ -618,6 +618,7 @@ public final class Gauge extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		
 		drawBackground(canvas);
 
 		float scale = (float) getWidth();		

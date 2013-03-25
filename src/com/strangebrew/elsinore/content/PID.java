@@ -79,20 +79,11 @@ public class PID extends Device {
     	if(aTime != 0.0) {
     		this.cycletime = aTime;
     	}
-    	
-    	
-    	if(p != 0D) {
-    		this.p_param = p;
-    	}
-    	
-    	if(i != 0D) {
-    		this.i_param = i;
-    	}
-    	
-    	if(k != 0D) {
-    		this.k_param = k;
-    	}
-    	
+    
+		this.p_param = p;
+		this.i_param = i;
+		this.k_param = k;
+		
     	if(mode.equalsIgnoreCase("off") || mode.equalsIgnoreCase("auto") || mode.equalsIgnoreCase("manual")) {
     		this.mode = mode;
     	}
