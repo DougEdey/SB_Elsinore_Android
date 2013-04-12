@@ -14,7 +14,6 @@
         android:id="@+id/chrono_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         >
 
         <TextView
@@ -61,7 +60,6 @@
         android:id="@+id/gauge_layout"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/chrono_layout">
 
 	    <com.freddymartens.android.widgets.Gauge
@@ -100,9 +98,11 @@
     <RelativeLayout
         android:id="@+id/mode_layout"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gauge_layout" >
+        android:layout_above="@+id/mode_layout"
+        android:layout_toRightOf="@+id/gauge_layout" >
 
         <TextView
             android:id="@+id/section_label"

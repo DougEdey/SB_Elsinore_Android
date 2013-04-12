@@ -196,30 +196,25 @@ public class MainActivity extends FragmentActivity {
        if(d == null) {
     	   return;
        }
-       
+       RelativeLayout parentView = (RelativeLayout) rootView.getParent();
+       TextView tView = (TextView) parentView.findViewById(R.id.target_temp);
+       tView.setTag("input");
        switch(view.getId()) {
+       		
            case R.id.mode_auto:
                if (checked) {
-            	   TextView tView = (TextView) rootView.findViewById(R.id.target_temp);
             	   // don't change anything if we're tagged
-            	   tView.setTag("input");
-            	   switchAutoPid(rootView, d);	                
+            	   switchAutoPid(parentView, d);	                
                }
                break;
            case R.id.mode_manual:
                if (checked) {
-            	   TextView tView = (TextView) rootView.findViewById(R.id.target_temp);
-            	   // don't change anything if we're tagged
-            	   tView.setTag("input");
-                   switchManualPid(rootView, d);
+            	   switchManualPid(parentView, d);
                }
                break;
            case R.id.mode_off:
                if (checked) {
-            	   TextView tView = (TextView) rootView.findViewById(R.id.target_temp);
-            	   // don't change anything if we're tagged
-            	   tView.setTag("input");
-                   switchOffPid(rootView, d);
+            	   switchOffPid(parentView, d);
                }
                break;
        }
@@ -481,7 +476,7 @@ public class MainActivity extends FragmentActivity {
 
             graphView.getGraphViewStyle().setHorizontalLabelsColor(textColor);
             graphView.getGraphViewStyle().setVerticalLabelsColor(textColor);
-            graphView.setDrawBackground(true);
+            graphView.setDrawBackground(false);
             graphView.addSeries(d.deviceSeries);
             graphView.setScrollable(true);
             graphView.setScalable(false);
@@ -495,8 +490,9 @@ public class MainActivity extends FragmentActivity {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             
             params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-            params.addRule(RelativeLayout.BELOW, R.id.submit_settings);
-            
+            params.addRule(RelativeLayout.BELOW, R.id.submit_layout);
+            params.addRule(RelativeLayout.ALIGN_LEFT, R.id.submit_layout);
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
             pidLayout.addView(graphView, params);
             return rootView;
         }
@@ -1061,6 +1057,11 @@ public class MainActivity extends FragmentActivity {
     	if(lView != null) {
     		lView.setVisibility(TextView.VISIBLE);
     	}
+    	
+    	Button lButton = (Button) rootView.findViewById(R.id.submit_settings);
+    	if(lButton != null) {
+    		lButton.setVisibility(Button.VISIBLE);
+    	}
     }
     	
     public void switchAutoPid(View rootView, Device inDev) {
@@ -1183,6 +1184,10 @@ public class MainActivity extends FragmentActivity {
      		lView.setVisibility(TextView.VISIBLE);
      	}
      	
+     	Button lButton = (Button) rootView.findViewById(R.id.submit_settings);
+    	if(lButton != null) {
+    		lButton.setVisibility(Button.VISIBLE);
+    	}
      	return;
     }
     
@@ -1326,6 +1331,9 @@ public class MainActivity extends FragmentActivity {
     		rGroup.setVisibility(RadioGroup.VISIBLE);	
     	}
     	
-    
+    	Button lButton = (Button) rootView.findViewById(R.id.submit_settings);
+    	if(lButton != null) {
+    		lButton.setVisibility(Button.VISIBLE);
+    	}
     }
 }
