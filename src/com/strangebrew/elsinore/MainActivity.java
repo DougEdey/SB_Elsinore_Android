@@ -382,10 +382,10 @@ public class MainActivity extends FragmentActivity {
     
     public void resetChrono(View v) {
     	// do something with the chrono
-    	View rootView = (View) v.getParent();
+    	View cRootView = (View) v.getParent();
     	
     	
-    	Chronometer cView = (Chronometer) rootView.findViewById(R.id.chrono);
+    	Chronometer cView = (Chronometer) cRootView.findViewById(R.id.chrono);
     	
     	if(cView.getTag() == null) {
     		cView.setBase(SystemClock.elapsedRealtime());
@@ -399,17 +399,22 @@ public class MainActivity extends FragmentActivity {
     	}
     	
     	// also reset the input mode
-    	EditText tView = (EditText) rootView.findViewById(R.id.target_temp);
+    	View rView = (View) cRootView.getParent();
+    	EditText tView = (EditText) rView.findViewById(R.id.target_temp);
     	if(tView != null) {
     		tView.setTag("");
     	}
     	
     	// get the current device and clear it
-    	Device d = Data.getFuzzyDevice(rootView.getTag().toString());
-    	if(d != null) {
-    		d.deviceSeries.resetData(new GraphViewData[0]);
-    	}
+    	rView = (View) cRootView.getRootView().findViewById(R.id.ScrollView01);
     	
+    	if(rView.getTag() != null) {
+    		String rTag = rView.getTag().toString();
+	    	Device d = Data.getFuzzyDevice(rTag);
+	    	if(d != null) {
+	    		d.deviceSeries.resetData(new GraphViewData[0]);
+	    	}
+		}
     }
     
     /**
