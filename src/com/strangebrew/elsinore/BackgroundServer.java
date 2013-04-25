@@ -384,7 +384,7 @@ public class BackgroundServer extends IntentService {
 							+ tPID.k_param + "&i=" + tPID.i_param + "&p="
 							+ tPID.p_param;
 					// Log.i("Post", "Params: " + url + "/?" + urlParameters);
-					urlParameters = url + "/?" + urlParameters;
+					urlParameters = url + "/updatepid?" + urlParameters;
 					// Create a new HttpClient and Post Header
 					HttpClient httpclient = new DefaultHttpClient();
 					HttpPost httppost = new HttpPost(url);
