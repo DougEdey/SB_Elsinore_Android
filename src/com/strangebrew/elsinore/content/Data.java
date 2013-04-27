@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,6 +19,9 @@ public class Data {
      * A map of items, by ID.
      */
     public static Map<String, Device> ITEM_MAP = new HashMap<String, Device>();
+    
+    // Dump in a BrewDay struct 
+    public static BrewDay brewDay = new BrewDay();
 
     static {
         // Add 3 sample items.

@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.strangebrew.elsinore.R;
+import com.strangebrew.elsinore.content.BrewDay;
 import com.strangebrew.elsinore.content.Data;
 import com.strangebrew.elsinore.content.Device;
 import com.strangebrew.elsinore.content.PID;
@@ -259,13 +260,24 @@ public class BackgroundServer extends IntentService {
 
 				// iterate the list for objects
 				Iterator<?> keys = inObject.keys();
-
-				while (keys.hasNext()) {
-					String key = (String) keys.next();
-					if (inObject.get(key) instanceof JSONObject) {
-						iDataCheck((JSONObject) inObject.get(key), key);
-					}
-				}
+				boolean updatedDate = false;
+		        while( keys.hasNext() ){
+		            String key = (String)keys.next();
+		            
+		            if (inObject.get(key) instanceof JSONObject ) {
+		            	if (key.equalsIgnoreCase("brewday")) {
+		            		brewDayCheck((JSONObject)inObject.get(key));
+		            		updatedDate = true;
+		            	} else {
+		            		iDataCheck((JSONObject)inObject.get(key), key);
+		            	}
+		            }
+		        }
+		        
+		        if (!updatedDate && Data.brewDay.getUpdate() != null) {
+		        	// haven't updated the date from the server, so it's not set but we have data
+		        	updateBrewDayServer ();
+		        }
 
 				try {
 					Thread.sleep(500);
@@ -473,6 +485,112 @@ public class BackgroundServer extends IntentService {
 			je.printStackTrace();
 		} catch (NumberFormatException ne) {
 			ne.printStackTrace();
+		}
+		
+    	
+	}
+
+	private void brewDayCheck(JSONObject jsonObject) {
+		// try to check it all
+		BrewDay tDay = new BrewDay();
+		try {
+    		if(jsonObject.has("startDay")) {
+    			tDay.setStart(jsonObject.getString("startDay"));
+    		}
+    		
+    		if(jsonObject.has("mashIn")) {
+    			tDay.setMashIn(jsonObject.getString("mashIn"));
+    		}
+    		
+    		if(jsonObject.has("mashOut")) {
+    			tDay.setMashOut(jsonObject.getString("mashOut"));
+    		}
+    		
+    		if(jsonObject.has("spargeStart")) {
+    			tDay.setSpargeStart(jsonObject.getString("spargeStart"));
+    		}
+    		
+    		if(jsonObject.has("spargeEnd")) {
+    			tDay.setSpargeEnd(jsonObject.getString("spargeEnd"));
+    		}
+    		
+    		if(jsonObject.has("boilStart")) {
+    			tDay.setBoilStart(jsonObject.getString("boilStart"));
+    		}
+			
+    		if(jsonObject.has("chillStart")) {
+    			tDay.setChillStart(jsonObject.getString("chillStart"));
+    		}
+    		
+    		if(jsonObject.has("chillEnd")) {
+    			tDay.setChillEnd(jsonObject.getString("chillEnd"));
+    		}
+    		
+    		if(jsonObject.has("updated")) {
+    			tDay.setUpdated(jsonObject.getString("updated"));
+    		}
+    		
+    		
+    		// which is the most current brew day data?
+    		if(Data.brewDay.getUpdate() != null && (Data.brewDay.getUpdate().compareTo(tDay.getUpdate()) < 0)) {
+    			updateBrewDayServer();
+    			
+    		} else {
+    			Data.brewDay = tDay;
+    		}
+    		
+		} catch (JSONException e) {
+			System.out.println("Could not parse BrewDay Json.");
+		}
+		
+	}
+
+	private void updateBrewDayServer() {
+		// update the server side, it's older
+		// Log.i("POST", "Creating params");
+		
+		// Log.i("Post", "Params: " + url + "/?" + urlParameters);
+		String urlParameters = url + "/updateday";
+		// Create a new HttpClient and Post Header
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(urlParameters);
+
+		try {
+			// Add your data
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+					2);
+			nameValuePairs.add(new BasicNameValuePair("startDay",
+					Data.brewDay.getStartString()));
+			nameValuePairs.add(new BasicNameValuePair("mashIn",
+					Data.brewDay.getMashInString()));
+			nameValuePairs.add(new BasicNameValuePair("mashOut",
+					Data.brewDay.getMashOutString()));
+			nameValuePairs.add(new BasicNameValuePair("spargeStart",
+					Data.brewDay.getSpargeStartString()));
+			nameValuePairs.add(new BasicNameValuePair("spargeEnd",
+					Data.brewDay.getSpargeEndString()));
+			nameValuePairs.add(new BasicNameValuePair("boilStart",
+					Data.brewDay.getBoilStartString()));
+			nameValuePairs.add(new BasicNameValuePair("chillStart",
+					Data.brewDay.getChillStartString()));
+			nameValuePairs.add(new BasicNameValuePair("chillEnd",
+					Data.brewDay.getChillEndString()));
+			nameValuePairs.add(new BasicNameValuePair("updated",
+					Data.brewDay.getUpdatedString()));
+			
+			
+			httppost.setEntity(new UrlEncodedFormEntity(
+					nameValuePairs));
+
+			// Execute HTTP Post Request
+			HttpResponse response = httpclient.execute(httppost);
+			if(response.getStatusLine().getStatusCode() != 200) {
+				System.out.println("Bad error code from posting the updated dates!");
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 		}
 	}
 

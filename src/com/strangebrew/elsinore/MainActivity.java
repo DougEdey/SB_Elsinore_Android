@@ -550,11 +550,46 @@ public class MainActivity extends FragmentActivity {
             OnLongClickListener longPressTime = new OnLongClickListener() {
 	
 	        	public void reallySetTime(TextView v) {
-	            	// we now want to forcefull overwrite the textView
-	            	SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss dd/MM/yyyy");
+	            	// we now want to forcefully overwrite the textView
+	            	SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	            	String format = s.format(new Date());
 	            	
 	            	v.setText(format);
+	            	
+	            	// determine which view we're in
+	            	switch (v.getId()) {
+	            	
+	            	case R.id.start_time:
+	            		Data.brewDay.setStart(format);
+	            		break;
+	            	case R.id.mash_in_time:
+	            		Data.brewDay.setMashIn(format);
+	            		break;
+	            	case R.id.mash_out_time:
+	            		Data.brewDay.setMashOut(format);
+	            		break;	
+	            		/* not implemented yet
+	            	case R.id.sparge_start_time:
+	            		Data.brewDay.setSpargeStart(format);
+	            		break;
+	            	case R.id.sparge_end_time:
+	            		Data.brewDay.setSpargeEnd(format);
+	            		break;
+	            			*/
+	            	case R.id.boil_start_time:
+	            		Data.brewDay.setBoilStart(format);
+	            		break;
+	            	case R.id.boil_end_time:
+	            	case R.id.cool_start_time:
+	            		Data.brewDay.setChillStart(format);
+	            		break;	
+	            	case R.id.cool_end_time:
+	            		Data.brewDay.setChillEnd(format);
+	            		break;	
+	            			
+	            	}
+	            	
+	            	Data.brewDay.setUpdated(format);
 	            	
 	            }
 	            
@@ -706,6 +741,7 @@ public class MainActivity extends FragmentActivity {
             rootView.findViewById(R.id.cool_end_time).setOnLongClickListener(longPressTime);
             rootView.findViewById(R.id.cool_end_time).setEnabled(false);
             
+          
             return rootView;
         }
         
@@ -727,10 +763,11 @@ public class MainActivity extends FragmentActivity {
         @Override
          public void onReceive(Context context, Intent intent) {
         	
-
+        	setBrewTimes((View) mViewPager.getChildAt(0).getParent());
         	// iterate through and find the values with tags to be updated
         	View child = ((View) mViewPager.getChildAt(mViewPager.getCurrentItem()).getParent());
         	
+
         	
         	for (int i = 0; i < Data.ITEMS.size(); i++) {
         		String tName = Data.ITEMS.get(i).name;
@@ -826,9 +863,46 @@ public class MainActivity extends FragmentActivity {
         	}
 
          }
+
+		
      }
 
-
+    public void setBrewTimes(View brewDayView) {
+		EditText eText = (EditText) brewDayView.findViewById(R.id.start_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getStartString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.mash_in_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getMashInString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.mash_out_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getMashOutString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.boil_start_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getBoilStartString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.boil_end_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getChillStartString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.cool_start_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getChillStartString());
+		}
+		
+		eText = (EditText) brewDayView.findViewById(R.id.cool_end_time);
+		if(eText != null) {
+			eText.setText(Data.brewDay.getChillEndString());
+		}
+	}
     
     public static void hideAllInputs(View rootView) {
     	
