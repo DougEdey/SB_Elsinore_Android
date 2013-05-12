@@ -399,7 +399,7 @@ public class BackgroundServer extends IntentService {
 					urlParameters = url + "/updatepid?" + urlParameters;
 					// Create a new HttpClient and Post Header
 					HttpClient httpclient = new DefaultHttpClient();
-					HttpPost httppost = new HttpPost(url);
+					HttpPost httppost = new HttpPost(url + "/updatepid");
 
 					try {
 						// Add your data
